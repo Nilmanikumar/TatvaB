@@ -16,10 +16,15 @@ mongoose.connect(mongoUrl)
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // ✅ Enable CORS for all origins
-app.use(cors());
-app.options("/*", cors()); // preflight support
+app.use(cors()); // this is all you need!
 
 // ✅ Middleware
 app.use(bodyParser.json());
 
 // ✅ Routes
+app.use(authRoutes);
+
+// ✅ Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
