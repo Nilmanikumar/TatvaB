@@ -1,32 +1,25 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose')
-const {mongoUrl} = require('./keys')
-const authRoutes = require('./routes/auth')
-// const authRoutes = require("./routes/auth");
+const mongoose = require("mongoose");
+const { mongoUrl } = require("./keys");
+const authRoutes = require("./routes/auth");
 
-require('./models/User')
-try{
-  mongoose.connect(mongoUrl)
-  mongoose.connection.on('connected',()=>{
-    console.log("yeah")
-})
-}
-catch{
-  mongoose.connect(mongoUrl)
-  mongoose.connection.on('connected',()=>{
-    console.log("yeah")
-})
-}
+require("./models/User");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
+// ✅ Connect to MongoDB
+mongoose.connect(mongoUrl)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+// ✅ Enable CORS for all origins
 app.use(cors());
-app.use(bodyParser.json());
-app.use(authRoutes)
+app.options("*", cors()); // preflight support
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// ✅ Middleware
+app.use(bodyParser.json());
+
+// ✅ Routes
