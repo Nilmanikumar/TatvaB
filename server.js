@@ -17,7 +17,7 @@ mongoose.connect(mongoUrl)
 
 // ✅ Enable CORS for all origins
 app.use(cors());
-app.options("*", cors()); // preflight support
+app.options("/*", cors()); // preflight support
 
 // ✅ Middleware
 app.use(bodyParser.json());
